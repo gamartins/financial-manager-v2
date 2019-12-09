@@ -1,0 +1,21 @@
+const key = 'fmv2:registry'
+
+const get = () => {
+  const dataList = JSON.parse(localStorage.getItem(key))
+
+  if (!dataList) {
+    localStorage.setItem(key, JSON.stringify([]))
+    return []
+  } else {
+    return dataList
+  }
+}
+
+const save = (dataList) => {
+  localStorage.setItem(key, JSON.stringify(dataList))
+}
+
+export default {
+  get,
+  save
+}
