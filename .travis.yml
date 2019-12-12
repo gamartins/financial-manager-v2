@@ -6,6 +6,7 @@ cache:
   directories:
   - node_modules
 script:
+  - npm run test-build
   - npm run build
 deploy:
   provider: s3
