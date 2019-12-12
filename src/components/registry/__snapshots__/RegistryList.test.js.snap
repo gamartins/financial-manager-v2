@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RegistryList/> should be created 1`] = `
+<div>
+  <table
+    className="table table-hover"
+  >
+    <thead>
+      <tr>
+        <th>
+          Nome
+        </th>
+        <th>
+          Tipo
+        </th>
+        <th>
+          Categoria
+        </th>
+        <th>
+          Valor
+        </th>
+        <th>
+          Ações
+        </th>
+      </tr>
+    </thead>
+    <tbody />
+    <tfoot>
+      <tr>
+        <td
+          colSpan="3"
+        >
+          Total
+        </td>
+        <td
+          colSpan="2"
+          id="cell-total"
+        >
+          R$ 
+          0
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+`;

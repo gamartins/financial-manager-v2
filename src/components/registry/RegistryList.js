@@ -37,6 +37,12 @@ export default class RegistryList extends Component {
     return proventos - descontos
   }
 
+  findCategory(categoryId) {
+    const category = this.categoryList.find(category => category.id === categoryId)
+
+    return category ? category.name : 'Sem categoria'
+  }
+
   render() {
     return (
       <div>
@@ -57,19 +63,28 @@ export default class RegistryList extends Component {
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>{item.type === Registry.TYPE.PROVENTO ? 'Proveto' : 'Desconto' }</td>
-                <td>{this.categoryList.find(category => category.id === item.category).name}</td>
+                <td>{this.findCategory(item.category)}</td>
                 <td>R$ {item.price}</td>
                 <td>
-                  <FontAwesomeIcon icon={faEdit} onClick={() => this.editItem(item.id)}/>
-                  <FontAwesomeIcon icon={faTrash} onClick={() => this.removeItem(item.id)} />
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    id="edit-item-icon"
+                    onClick={() => this.editItem(item.id)}/>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    id="remove-item-icon"
+                    onClick={() => this.removeItem(item.id)} />
                 </td>
               </tr>
             ))}
+          </tbody>
+
+          <tfoot>
             <tr>
               <td colSpan="3">Total</td>
-              <td colSpan="2">R$ {this.calcTotal()}</td>
+              <td id='cell-total' colSpan="2">R$ {this.calcTotal()}</td>
             </tr>
-          </tbody>
+          </tfoot>
 
         </Table>
       </div>
