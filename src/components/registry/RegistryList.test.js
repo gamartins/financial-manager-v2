@@ -1,7 +1,6 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import renderer from 'react-test-renderer';
 
 import RegistryList from './RegistryList';
 import Registry from './Registry';
@@ -11,8 +10,8 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('<RegistryList/>', () => {
 
   test('should be created', () => {
-    const component = renderer.create(<RegistryList dataList={[]} />)
-    expect(component.toJSON()).toMatchSnapshot()
+    const wrapper = mount(<RegistryList dataList={[]} />)
+    expect(wrapper).toMatchSnapshot()
   })
 
   test('should receive a registry list as props', () => {
