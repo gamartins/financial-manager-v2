@@ -32,8 +32,14 @@ export default class CategotyList extends Component {
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>
-                  <FontAwesomeIcon icon={faEdit} onClick={() => this.editItem(item.id)}/>
-                  <FontAwesomeIcon icon={faTrash} onClick={() => this.removeItem(item.id)} />
+                  <FontAwesomeIcon
+                    id="edit-item-icon"
+                    icon={faEdit}
+                    onClick={() => this.editItem(item.id)}/>
+                  <FontAwesomeIcon
+                    id="remove-item-icon"
+                    icon={faTrash}
+                    onClick={() => this.removeItem(item.id)} />
                 </td>
               </tr>
             ))}
