@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 
+import addMonths from 'date-fns/addMonths'
+
 import RegistryForm from './RegistryForm'
 import RegistryList from './RegistryList'
+import DatePagination from '../date-pagination/DatePagination'
 import RegistryService from '../../services/RegistryService'
 
 export default class Registry extends Component {
@@ -15,6 +18,7 @@ export default class Registry extends Component {
     super(props)
 
     this.state = {
+      date: new Date(),
       dataList: [],
       formValues: {
         id: null,
@@ -31,8 +35,23 @@ export default class Registry extends Component {
   }
 
   getAll() {
-    const dataList = RegistryService.get()
+    const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
+
+    const dataList = RegistryService.get(dateQuery)
+    
     this.setState({ dataList })
+  }
+
+  getNext() {
+    this.setState(
+      (state) => ({ date: addMonths(state.date, 1) }),
+      () => this.getAll())
+  }
+
+  getPrevious() {
+    this.setState(
+      (state) => ({ date: addMonths(state.date, -1) }),
+      () => this.getAll())
   }
 
   setFormValue(id) {
@@ -64,6 +83,7 @@ export default class Registry extends Component {
   }
 
   add(values) {
+    const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
     const dataList = [ ...this.state.dataList ]
     dataList.push({
       id: Math.ceil((Math.random() * 100000)),
@@ -73,7 +93,7 @@ export default class Registry extends Component {
       category: parseInt(values.category),
     })
 
-    RegistryService.save(dataList)
+    RegistryService.save(dataList, dateQuery)
     this.setState({ dataList: dataList })
     this.resetFormValue()
 
@@ -81,6 +101,7 @@ export default class Registry extends Component {
   }
 
   edit(values) {
+    const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
     const index = this.state.dataList.findIndex(item => item.id === values.id)
     const dataList = [ ...this.state.dataList ]
     dataList[index] = {
@@ -91,7 +112,7 @@ export default class Registry extends Component {
       category: parseInt(values.category),
     }
 
-    RegistryService.save(dataList)
+    RegistryService.save(dataList, dateQuery)
     this.setState({ dataList: dataList })
     this.resetFormValue()
 
@@ -114,6 +135,11 @@ export default class Registry extends Component {
         <RegistryForm
           initialValues={this.state.formValues}
           saveItem={values => this.save(values)} />
+        <DatePagination
+          date={this.state.date}
+          format={'MMM'}
+          previous={() => this.getPrevious()}
+          next={() => this.getNext()}/>
         <RegistryList
           dataList={this.state.dataList}
           removeItem={id => this.remove(id)}

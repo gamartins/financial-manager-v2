@@ -86,4 +86,28 @@ describe('<Registry />' ,() => {
 
         expect(wrapper.instance().state.dataList).toHaveLength(1)
     })
+
+    test('should call getAll with the next month query after getNext event', () => {
+        const wrapper = shallow(<Registry />)
+        wrapper.setState({ date: new Date(2019, 11, 18) })
+        
+        const mockCallback = jest.fn(() => {})
+        RegistryService.get = mockCallback
+
+        wrapper.instance().getNext()
+
+        expect(mockCallback).toHaveBeenCalledWith('20200')
+    })
+
+    test('should call getAll with the next month query after getNext event', () => {
+        const wrapper = shallow(<Registry />)
+        wrapper.setState({ date: new Date(2019, 11, 18) })
+        
+        const mockCallback = jest.fn(() => {})
+        RegistryService.get = mockCallback
+
+        wrapper.instance().getPrevious()
+
+        expect(mockCallback).toHaveBeenCalledWith('201910')
+    })
 })
