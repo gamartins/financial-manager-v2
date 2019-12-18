@@ -4,6 +4,8 @@ import { Formik } from 'formik'
 import Registry from './Registry'
 import CategoryService from '../../services/CategoryService'
 
+import './RegistryForm.css'
+
 export default class RegistryForm extends React.Component {
   
   categorylist = []
@@ -19,57 +21,50 @@ export default class RegistryForm extends React.Component {
   renderForm(props) {
     return (
       <form onSubmit={props.handleSubmit} className="form-inline">
-        <div className='mr-3'>
+        <input
+          className="form-control form-control-grow mr-3"
+          type="text"
+          name="name"
+          placeholder="Nome do item"
+          onChange={props.handleChange}
+          onBlur={props.handleBlur}
+          value={props.values.name} />
+      
+        <select
+          className="form-control mr-3"
+          name="type"
+          type="number"
+          onChange={props.handleChange}
+          onBlur={props.handleBlur}
+          value={props.values.type}>
+          <option value={Registry.TYPE.PROVENTO}>Provento</option>
+          <option value={Registry.TYPE.DESCONTO}>Desconto</option>
+        </select>
+
+        <select
+          className="form-control mr-3"
+          name="category"
+          onChange={props.handleChange}
+          onBlur={props.handleBlur}
+          value={props.values.category}>
+          {this.categorylist.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
+        </select>
+      
+        <div className="input-group mr-3">
+          <div className="input-group-prepend">
+            <div className="input-group-text">R$</div>
+          </div>
           <input
             className="form-control"
-            type="text"
-            name="name"
-            placeholder="Nome do item"
-            onChange={props.handleChange}
-            onBlur={props.handleBlur}
-            value={props.values.name} />
-        </div>
-        
-        <div className='mr-3'>
-          <select
-            className="form-control"
-            name="type"
             type="number"
+            name="price"
+            step="0.01"
+            placeholder="Preço"
             onChange={props.handleChange}
             onBlur={props.handleBlur}
-            value={props.values.type}>
-            <option value={Registry.TYPE.PROVENTO}>Provento</option>
-            <option value={Registry.TYPE.DESCONTO}>Desconto</option>
-          </select>
+            value={props.values.price} />
         </div>
 
-        <div className='mr-3'>
-          <select
-            className="form-control"
-            name="category"
-            onChange={props.handleChange}
-            onBlur={props.handleBlur}
-            value={props.values.category}>
-            {this.categorylist.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
-          </select>
-        </div>
-        
-        <div className='mr-3'>
-          <div className="input-group">
-            <div className="input-group-prepend">
-              <div className="input-group-text">R$</div>
-            </div>
-            <input
-              className="form-control"
-              type="number"
-              name="price"
-              placeholder="Preço"
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
-              value={props.values.price} />
-          </div>
-        </div>
-        
         <button className="btn btn-primary" type="submit">Salvar</button>
       </form>
     )
@@ -77,7 +72,7 @@ export default class RegistryForm extends React.Component {
 
   render() {
     return (
-      <div className="mb-4">
+      <div className="RegistryForm mb-4">
         <Formik
           initialValues={this.props.initialValues}
           enableReinitialize={true}
