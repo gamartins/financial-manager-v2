@@ -43,6 +43,21 @@ export default class RegistryList extends Component {
     return category ? category.name : 'Sem categoria'
   }
 
+  findStatus(status) {
+    switch (status) {
+      case Registry.STATUS.NOT_PAID:
+        return 'Não pago'
+      case Registry.STATUS.PAID:
+        return 'Pago'
+      case Registry.STATUS.PAID_FINANCIAL_CASH:
+        return 'Depositar em poup'
+      case Registry.STATUS.RESERVERD_SAVINGS:
+        return 'Depositado em poup'
+      default:
+        return ''
+    }
+  }
+
   render() {
     return (
       <div>
@@ -53,6 +68,7 @@ export default class RegistryList extends Component {
               <th>Nome</th>
               <th>Tipo</th>
               <th>Categoria</th>
+              <th>Status</th>
               <th>Valor</th>
               <th>Ações</th>
             </tr>
@@ -64,6 +80,7 @@ export default class RegistryList extends Component {
                 <td>{item.name}</td>
                 <td>{item.type === Registry.TYPE.PROVENTO ? 'Proveto' : 'Desconto' }</td>
                 <td>{this.findCategory(item.category)}</td>
+                <td>{this.findStatus(item.status)}</td>
                 <td>R$ {item.price}</td>
                 <td>
                   <FontAwesomeIcon
@@ -81,7 +98,7 @@ export default class RegistryList extends Component {
 
           <tfoot>
             <tr>
-              <td colSpan="3">Total</td>
+              <td colSpan="4">Total</td>
               <td id='cell-total' colSpan="2">R$ {this.calcTotal()}</td>
             </tr>
           </tfoot>

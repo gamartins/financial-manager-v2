@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 
 import addMonths from 'date-fns/addMonths'
+import { Button } from 'react-bootstrap'
 
 import RegistryForm from './RegistryForm'
 import RegistryList from './RegistryList'
 import DatePagination from '../date-pagination/DatePagination'
 import RegistryService from '../../services/RegistryService'
+
+import './Registry.css'
 
 export default class Registry extends Component {
 
@@ -14,18 +17,27 @@ export default class Registry extends Component {
     DESCONTO: 1,
   }
 
+  static STATUS = {
+    NOT_PAID: 0,
+    PAID: 1,
+    PAID_FINANCIAL_CASH: 2,
+    RESERVERD_SAVINGS: 3, 
+  }
+
   constructor(props) {
     super(props)
 
     this.state = {
       date: new Date(),
       dataList: [],
+      showModal: false,
       formValues: {
         id: null,
         name: '',
         price: 0,
         type: Registry.TYPE.DESCONTO,
-        category: ''
+        category: '',
+        status: Registry.STATUS.NOT_PAID
       }
     }
   }
@@ -64,6 +76,7 @@ export default class Registry extends Component {
     const newFormValues = { ...this.state.dataList[index] }
     
     this.setState({ formValues: newFormValues })
+    this.toggleModal()
   }
 
   resetFormValue() {
@@ -74,6 +87,7 @@ export default class Registry extends Component {
         price: 0,
         type: Registry.TYPE.DESCONTO,
         category: '',
+        status: Registry.STATUS.NOT_PAID,
       }
     })
   }
@@ -91,11 +105,13 @@ export default class Registry extends Component {
       price: values.price,
       type: parseInt(values.type),
       category: parseInt(values.category),
+      status: parseInt(values.status),
     })
 
     RegistryService.save(dataList, dateQuery)
     this.setState({ dataList: dataList })
     this.resetFormValue()
+    this.toggleModal()
 
     return Promise.resolve()
   }
@@ -110,11 +126,13 @@ export default class Registry extends Component {
       price: values.price,
       type: parseInt(values.type),
       category: parseInt(values.category),
+      status: parseInt(values.status),
     }
 
     RegistryService.save(dataList, dateQuery)
     this.setState({ dataList: dataList })
     this.resetFormValue()
+    this.toggleModal()
 
     return Promise.resolve()
   }
@@ -129,17 +147,37 @@ export default class Registry extends Component {
     }    
   }
 
+  toggleModal() {
+    this.setState(
+      state => ({ showModal: !state.showModal }),
+      () => {
+        if (!this.state.showModal) {
+          this.resetFormValue()
+        }
+      })
+  }
+
   render() {
     return (
-      <div>
+      <div className="Registry">
         <RegistryForm
+          showModal={this.state.showModal}
+          toggleModal={() => this.toggleModal()}
           initialValues={this.state.formValues}
           saveItem={values => this.save(values)} />
-        <DatePagination
-          date={this.state.date}
-          format={'MMM'}
-          previous={() => this.getPrevious()}
-          next={() => this.getNext()}/>
+
+        <div className="actions">
+          <Button id="actions-add" onClick={() => this.toggleModal()}>
+            Novo
+          </Button>
+
+          <DatePagination
+            date={this.state.date}
+            format={'MMM'}
+            previous={() => this.getPrevious()}
+            next={() => this.getNext()}/>
+        </div>
+
         <RegistryList
           dataList={this.state.dataList}
           removeItem={id => this.remove(id)}

@@ -36,23 +36,48 @@ describe('<RegistryForm />', () => {
   })
 
   test('should show a list of categories in select element', () => {
-    const wrapper = mount(<RegistryForm initialValues={initialValues} />)
+    const wrapper = mount(<RegistryForm initialValues={initialValues} showModal={true} />)
 
-    expect(wrapper.find('select[name="category"] option')).toHaveLength(2)
-    expect(wrapper.find('select[name="category"] option:first-child').text()).toBe('Mock category 01')
+    expect(wrapper.find('select[name="category"] option')).toHaveLength(3)
+    expect(wrapper.find('select[name="category"] option').at(1).text()).toBe('Mock category 01')
   })
 
   test('should call saveItem prop on save button click', async () => {
     const saveItem = jest.fn(() => Promise.resolve())
     const component = mount(<RegistryForm
       initialValues={initialValues}
+      showModal={true}
       saveItem={values => saveItem(values)}/>)
 
     await act(async () => {
-      component.find('button').simulate('submit', { preventDefault: () => {} })
+      component.find('button[type="submit"]').simulate('submit', { preventDefault: () => {} })
     })
 
     expect(saveItem).toHaveBeenCalledWith(initialValues)
+  })
+
+  test('should call toggleModal on cancel button click', () => {
+    const toggleModalMock = jest.fn()
+    const wrapper = mount(<RegistryForm
+      showModal={true}
+      toggleModal={toggleModalMock}
+      initialValues={initialValues} />)
+
+    wrapper.find('.modal-footer button.btn.btn-secondary').simulate('click')
+
+    expect(toggleModalMock).toHaveBeenCalled()
+  })
+
+  test('should show form modal when pros.showModal is true', async () => {
+    const wrapper = mount(<RegistryForm
+      showModal={false}
+      initialValues={initialValues} />)
+
+    expect(wrapper.find('.modal-dialog')).toHaveLength(0)
+
+    wrapper.setProps({ showModal: true })
+
+    expect(wrapper.find('.modal-dialog')).toHaveLength(1)
   })
 
 })

@@ -1,0 +1,8 @@
+.Registry .actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Registry .actions .btn {
+    margin-bottom: 1rem;
+}

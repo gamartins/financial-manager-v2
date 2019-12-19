@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils';
 import Registry from './Registry'
 import Enzyme, { mount, shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
@@ -109,5 +110,43 @@ describe('<Registry />' ,() => {
         wrapper.instance().getPrevious()
 
         expect(mockCallback).toHaveBeenCalledWith('201910')
+    })
+
+    test('should show <RegistryForm /> modal when click on new button', async () => {
+        const wrapper = shallow(<Registry />)
+        expect(wrapper.instance().state.showModal).toBeFalsy()
+
+        await act(async () => {
+            wrapper.find('.actions #actions-add').simulate('click', { preventDefault: () => {} })
+        })
+
+        expect(wrapper.instance().state.showModal).toBeTruthy()
+    })
+
+    test('should reset form when hide modal', () => {
+        const wrapper = shallow(<Registry />)
+        wrapper.setState({
+            dataList: [],
+            showModal: true,
+            formValues: {
+                id: null,
+                name: 'Some item',
+                price: 59.90,
+                type: Registry.TYPE.DESCONTO,
+                category: 1,
+                status: Registry.STATUS.NOT_PAID
+            }
+        })
+
+        wrapper.instance().toggleModal()
+
+        expect(wrapper.instance().state.formValues).toEqual({
+            id: null,
+            name: '',
+            price: 0,
+            type: Registry.TYPE.DESCONTO,
+            category: '',
+            status: Registry.STATUS.NOT_PAID
+        })
     })
 })
