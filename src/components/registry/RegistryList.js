@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import PropTypes from 'prop-types'
 import Table from 'react-bootstrap/Table'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -107,4 +107,19 @@ export default class RegistryList extends Component {
       </div>
     )
   }
+}
+
+RegistryList.propTypes = {
+  editItem: PropTypes.func,
+  removeItem: PropTypes.func,
+  dataList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      type: PropTypes.number,
+      category: PropTypes.number,
+      status: PropTypes.number,
+      price: PropTypes.number,
+    })
+  ).isRequired
 }

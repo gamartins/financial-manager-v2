@@ -1,5 +1,6 @@
 import React from 'react'
 import { Formik } from 'formik'
+import PropTypes from 'prop-types'
 
 export default class CategoryForm extends React.Component {
 
@@ -38,4 +39,10 @@ export default class CategoryForm extends React.Component {
       </div>
     )
   }
+}
+
+CategoryForm.propTypes = {
+  initialValues: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
 }

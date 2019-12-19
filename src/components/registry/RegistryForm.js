@@ -1,6 +1,7 @@
 import React from 'react'
 import { Formik } from 'formik'
 import { Modal, Button } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 
 import Registry from './Registry'
 import CategoryService from '../../services/CategoryService'
@@ -106,4 +107,19 @@ export default class RegistryForm extends React.Component {
       </Modal>
     )
   }
+}
+
+RegistryForm.propTypes = {
+  saveItem: PropTypes.func,
+  toogleModal: PropTypes.func,
+  initialValues: PropTypes.shape({
+    name: PropTypes.string,
+    type: PropTypes.number,
+    status: PropTypes.number,
+    category: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    price: PropTypes.number
+  }).isRequired,
 }

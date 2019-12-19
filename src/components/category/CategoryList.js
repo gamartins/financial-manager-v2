@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import Table from 'react-bootstrap/Table'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 
-export default class CategotyList extends Component {
+export default class CategoryList extends Component {
 
   removeItem(item) {
     this.props.removeItem(item)
@@ -49,4 +50,13 @@ export default class CategotyList extends Component {
       </div>
     )
   }
+}
+
+CategoryList.propTypes = {
+  dataList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ).isRequired
 }

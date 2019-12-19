@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import { format } from 'date-fns'
 
@@ -32,4 +33,11 @@ export default class DatePagination extends Component {
       </nav>
     )
   }
+}
+
+DatePagination.propTypes = {
+  date: PropTypes.instanceOf(Date).isRequired,
+  format: PropTypes.string.isRequired,
+  previous: PropTypes.func,
+  next: PropTypes.func,
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import CategoryForm from './CategoryForm'
-import CategotyList from './CategotyList'
+import CategoryList from './CategoryList'
 import CategoryService from '../../services/CategoryService'
 
 export default class Category extends Component {
@@ -99,7 +99,7 @@ export default class Category extends Component {
         <CategoryForm
           initialValues={this.state.formValues}
           saveItem={values => this.save(values)} />
-        <CategotyList
+        <CategoryList
           dataList={this.state.dataList}
           removeItem={id => this.remove(id)}
           editItem={item => this.setFormValue(item)} />

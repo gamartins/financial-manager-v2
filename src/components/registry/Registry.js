@@ -49,7 +49,7 @@ export default class Registry extends Component {
   getAll() {
     const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
 
-    const dataList = RegistryService.get(dateQuery)
+    const dataList = RegistryService.get(dateQuery) || []
     
     this.setState({ dataList })
   }

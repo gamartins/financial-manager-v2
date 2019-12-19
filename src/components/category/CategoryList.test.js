@@ -2,7 +2,7 @@ import React from 'react';
 import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import CategoryList from './CategotyList'
+import CategoryList from './CategoryList'
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -47,7 +47,7 @@ describe('<CategoryList/>', () => {
   })
 
   test('should call method editItem on edit icon click', () => {
-    const dataList = [{ id: 1 }]
+    const dataList = [{ id: 1, name: 'Some name' }]
     const onEditFunction = jest.fn(() => {})
     
     const wrapper = shallow(<CategoryList dataList={dataList} editItem={onEditFunction} />)
