@@ -7,23 +7,11 @@ import RegistryForm from './RegistryForm'
 import RegistryList from './RegistryList'
 import DatePagination from '../date-pagination/DatePagination'
 import RegistryService from '../../services/RegistryService'
+import Registry from '../../models/Registry'
 
-import './Registry.css'
+import './RegistryPage.css'
 
-export default class Registry extends Component {
-
-  static TYPE = {
-    PROVENTO: 0,
-    DESCONTO: 1,
-  }
-
-  static STATUS = {
-    NOT_PAID: 0,
-    PAID: 1,
-    PAID_FINANCIAL_CASH: 2,
-    RESERVERD_SAVINGS: 3, 
-  }
-
+export default class RegistryPage extends Component {
   constructor(props) {
     super(props)
 
@@ -37,8 +25,8 @@ export default class Registry extends Component {
         price: 0,
         type: Registry.TYPE.DESCONTO,
         category: '',
-        status: Registry.STATUS.NOT_PAID
-      }
+        status: Registry.STATUS.NOT_PAID,
+      },
     }
   }
 
@@ -50,20 +38,22 @@ export default class Registry extends Component {
     const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
 
     const dataList = RegistryService.get(dateQuery) || []
-    
+
     this.setState({ dataList })
   }
 
   getNext() {
     this.setState(
-      (state) => ({ date: addMonths(state.date, 1) }),
-      () => this.getAll())
+      state => ({ date: addMonths(state.date, 1) }),
+      () => this.getAll(),
+    )
   }
 
   getPrevious() {
     this.setState(
-      (state) => ({ date: addMonths(state.date, -1) }),
-      () => this.getAll())
+      state => ({ date: addMonths(state.date, -1) }),
+      () => this.getAll(),
+    )
   }
 
   setFormValue(id) {
@@ -73,10 +63,13 @@ export default class Registry extends Component {
       return
     }
 
-    const newFormValues = { ...this.state.dataList[index] }
-    
-    this.setState({ formValues: newFormValues })
-    this.toggleModal()
+    this.setState(prevState => {
+      this.toggleModal()
+
+      const newFormValues = prevState.dataList[index]
+
+      return { formValues: newFormValues }
+    })
   }
 
   resetFormValue() {
@@ -88,7 +81,7 @@ export default class Registry extends Component {
         type: Registry.TYPE.DESCONTO,
         category: '',
         status: Registry.STATUS.NOT_PAID,
-      }
+      },
     })
   }
 
@@ -98,18 +91,20 @@ export default class Registry extends Component {
 
   add(values) {
     const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
-    const dataList = [ ...this.state.dataList ]
-    dataList.push({
+    const item = {
       id: Math.ceil((Math.random() * 100000)),
       name: values.name,
       price: values.price,
       type: parseInt(values.type),
       category: parseInt(values.category),
       status: parseInt(values.status),
-    })
+    }
 
-    RegistryService.save(dataList, dateQuery)
-    this.setState({ dataList: dataList })
+    this.setState(
+      prevState => ({ dataList: [...prevState, item] }),
+      () => RegistryService.save(this.state.dataList, dateQuery),
+    )
+
     this.resetFormValue()
     this.toggleModal()
 
@@ -119,8 +114,7 @@ export default class Registry extends Component {
   edit(values) {
     const dateQuery = `${this.state.date.getFullYear()}${this.state.date.getMonth()}`
     const index = this.state.dataList.findIndex(item => item.id === values.id)
-    const dataList = [ ...this.state.dataList ]
-    dataList[index] = {
+    const item = {
       id: values.id,
       name: values.name,
       price: values.price,
@@ -129,8 +123,15 @@ export default class Registry extends Component {
       status: parseInt(values.status),
     }
 
-    RegistryService.save(dataList, dateQuery)
-    this.setState({ dataList: dataList })
+    this.setState(
+      prevState => {
+        const modifiedList = prevState
+        modifiedList[index] = item
+        return { dataList: modifiedList }
+      },
+      () => RegistryService.save(this.state.dataList, dateQuery),
+    )
+
     this.resetFormValue()
     this.toggleModal()
 
@@ -141,10 +142,9 @@ export default class Registry extends Component {
     const index = this.state.dataList.findIndex(item => item.id === id)
 
     if (index !== -1) {
-      this.state.dataList.splice(index, 1)
-      this.setState({ dataList: this.state.dataList })
+      this.setState(prevState => ({ dataList: prevState.dataList.splice(index, 1) }))
       this.resetFormValue()
-    }    
+    }
   }
 
   toggleModal() {
@@ -154,7 +154,8 @@ export default class Registry extends Component {
         if (!this.state.showModal) {
           this.resetFormValue()
         }
-      })
+      },
+    )
   }
 
   render() {
@@ -164,7 +165,8 @@ export default class Registry extends Component {
           showModal={this.state.showModal}
           toggleModal={() => this.toggleModal()}
           initialValues={this.state.formValues}
-          saveItem={values => this.save(values)} />
+          saveItem={values => this.save(values)}
+        />
 
         <div className="actions">
           <Button id="actions-add" onClick={() => this.toggleModal()}>
@@ -173,15 +175,17 @@ export default class Registry extends Component {
 
           <DatePagination
             date={this.state.date}
-            format={'MMM'}
+            format="MMM"
             previous={() => this.getPrevious()}
-            next={() => this.getNext()}/>
+            next={() => this.getNext()}
+          />
         </div>
 
         <RegistryList
           dataList={this.state.dataList}
           removeItem={id => this.remove(id)}
-          editItem={item => this.setFormValue(item)} />
+          editItem={item => this.setFormValue(item)}
+        />
       </div>
     )
   }

@@ -1,14 +1,14 @@
 const key = 'fmv2:registry'
 
-const get = (dateQuery) => {
+const get = dateQuery => {
   const dataList = JSON.parse(localStorage.getItem(`${key}${dateQuery}`))
 
   if (!dataList) {
     localStorage.setItem(`${key}${dateQuery}`, JSON.stringify([]))
     return []
-  } else {
-    return dataList
   }
+
+  return dataList
 }
 
 const save = (dataList, dateQuery) => {
@@ -17,5 +17,5 @@ const save = (dataList, dateQuery) => {
 
 export default {
   get,
-  save
+  save,
 }

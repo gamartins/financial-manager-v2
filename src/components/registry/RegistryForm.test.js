@@ -1,22 +1,22 @@
-import React from 'react';
-import { act } from 'react-dom/test-utils';
-import Enzyme, { shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import React from 'react'
+import { act } from 'react-dom/test-utils'
+import Enzyme, { shallow, mount } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
 
-import RegistryForm from './RegistryForm';
-import Registry from './Registry';
-
-jest.mock('../../services/CategoryService')
+import RegistryForm from './RegistryForm'
+import Registry from '../../models/Registry'
 import CategoryService from '../../services/CategoryService'
 
-Enzyme.configure({ adapter: new Adapter() });
+jest.mock('../../services/CategoryService')
+
+Enzyme.configure({ adapter: new Adapter() })
 
 const initialValues = {
   id: null,
   name: '',
   price: 0,
   type: Registry.TYPE.DESCONTO,
-  category: ''
+  category: '',
 }
 
 CategoryService.get.mockImplementation(() => [
@@ -26,7 +26,7 @@ CategoryService.get.mockImplementation(() => [
 
 describe('<RegistryForm />', () => {
   test('should be created', () => {
-    const wrapper = mount(<RegistryForm initialValues={initialValues} />)
+    const wrapper = mount(<RegistryForm initialValues={initialValues} showModal={false} />)
     expect(wrapper).toMatchSnapshot()
   })
 
@@ -36,7 +36,7 @@ describe('<RegistryForm />', () => {
   })
 
   test('should show a list of categories in select element', () => {
-    const wrapper = mount(<RegistryForm initialValues={initialValues} showModal={true} />)
+    const wrapper = mount(<RegistryForm initialValues={initialValues} showModal />)
 
     expect(wrapper.find('select[name="category"] option')).toHaveLength(3)
     expect(wrapper.find('select[name="category"] option').at(1).text()).toBe('Mock category 01')
@@ -46,8 +46,9 @@ describe('<RegistryForm />', () => {
     const saveItem = jest.fn(() => Promise.resolve())
     const component = mount(<RegistryForm
       initialValues={initialValues}
-      showModal={true}
-      saveItem={values => saveItem(values)}/>)
+      showModal
+      saveItem={values => saveItem(values)}
+    />)
 
     await act(async () => {
       component.find('button[type="submit"]').simulate('submit', { preventDefault: () => {} })
@@ -59,9 +60,10 @@ describe('<RegistryForm />', () => {
   test('should call toggleModal on cancel button click', () => {
     const toggleModalMock = jest.fn()
     const wrapper = mount(<RegistryForm
-      showModal={true}
+      showModal
       toggleModal={toggleModalMock}
-      initialValues={initialValues} />)
+      initialValues={initialValues}
+    />)
 
     wrapper.find('.modal-footer button.btn.btn-secondary').simulate('click')
 
@@ -71,7 +73,8 @@ describe('<RegistryForm />', () => {
   test('should show form modal when pros.showModal is true', async () => {
     const wrapper = mount(<RegistryForm
       showModal={false}
-      initialValues={initialValues} />)
+      initialValues={initialValues}
+    />)
 
     expect(wrapper.find('.modal-dialog')).toHaveLength(0)
 
@@ -79,5 +82,4 @@ describe('<RegistryForm />', () => {
 
     expect(wrapper.find('.modal-dialog')).toHaveLength(1)
   })
-
 })

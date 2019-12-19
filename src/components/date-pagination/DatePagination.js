@@ -18,21 +18,30 @@ export default class DatePagination extends Component {
     return (
       <nav>
         <ul className="DatePagination pagination">
-          <li id="item-previous" className="page-item" onClick={() => this.previous()}>
-            <span className="page-link">&laquo;</span>
+          <li id="item-previous" className="page-item">
+            <button type="button" className="page-link" onClick={() => this.previous()}>
+              &laquo;
+            </button>
           </li>
           <li id="item-actual" className="page-item">
             <span className="page-link">
               {format(this.props.date, this.props.format)}
             </span>
           </li>
-          <li id="item-next" className="page-item" onClick={() => this.next()}>
-            <span className="page-link">&raquo;</span>
+          <li id="item-next" className="page-item">
+            <button type="button" className="page-link" onClick={() => this.next()}>
+              &laquo;
+            </button>
           </li>
         </ul>
       </nav>
     )
   }
+}
+
+DatePagination.defaultProps = {
+  previous: () => {},
+  next: () => {},
 }
 
 DatePagination.propTypes = {

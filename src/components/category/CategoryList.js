@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export default class CategoryList extends Component {
-
   removeItem(item) {
     this.props.removeItem(item)
   }
@@ -17,6 +16,8 @@ export default class CategoryList extends Component {
   }
 
   render() {
+    const { dataList } = this.props
+
     return (
       <div>
         <Table hover>
@@ -29,18 +30,20 @@ export default class CategoryList extends Component {
           </thead>
 
           <tbody>
-            {this.props.dataList.map(item => (
+            {dataList.map(item => (
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>
                   <FontAwesomeIcon
                     id="edit-item-icon"
                     icon={faEdit}
-                    onClick={() => this.editItem(item.id)}/>
+                    onClick={() => this.editItem(item.id)}
+                  />
                   <FontAwesomeIcon
                     id="remove-item-icon"
                     icon={faTrash}
-                    onClick={() => this.removeItem(item.id)} />
+                    onClick={() => this.removeItem(item.id)}
+                  />
                 </td>
               </tr>
             ))}
@@ -52,11 +55,18 @@ export default class CategoryList extends Component {
   }
 }
 
+CategoryList.defaultProps = {
+  editItem: () => {},
+  removeItem: () => {},
+}
+
 CategoryList.propTypes = {
+  editItem: PropTypes.func,
+  removeItem: PropTypes.func,
   dataList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
-    })
-  ).isRequired
+    }),
+  ).isRequired,
 }

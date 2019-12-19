@@ -5,11 +5,15 @@ import Table from 'react-bootstrap/Table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 
-import Registry from './Registry'
 import CategoryService from '../../services/CategoryService'
+import Registry from '../../models/Registry'
 
 export default class RegistryList extends Component {
-  categoryList = []
+  constructor() {
+    super()
+
+    this.state = { categoryList: [] }
+  }
 
   componentDidMount() {
     this.categoryList = CategoryService.get()
@@ -38,24 +42,9 @@ export default class RegistryList extends Component {
   }
 
   findCategory(categoryId) {
-    const category = this.categoryList.find(category => category.id === categoryId)
+    const selectedCategory = this.state.categoryList.find(category => category.id === categoryId)
 
-    return category ? category.name : 'Sem categoria'
-  }
-
-  findStatus(status) {
-    switch (status) {
-      case Registry.STATUS.NOT_PAID:
-        return 'Não pago'
-      case Registry.STATUS.PAID:
-        return 'Pago'
-      case Registry.STATUS.PAID_FINANCIAL_CASH:
-        return 'Depositar em poup'
-      case Registry.STATUS.RESERVERD_SAVINGS:
-        return 'Depositado em poup'
-      default:
-        return ''
-    }
+    return selectedCategory ? selectedCategory.name : 'Sem categoria'
   }
 
   render() {
@@ -80,17 +69,19 @@ export default class RegistryList extends Component {
                 <td>{item.name}</td>
                 <td>{item.type === Registry.TYPE.PROVENTO ? 'Proveto' : 'Desconto' }</td>
                 <td>{this.findCategory(item.category)}</td>
-                <td>{this.findStatus(item.status)}</td>
+                <td>{Registry.getStatusString(item.status)}</td>
                 <td>R$ {item.price}</td>
                 <td>
                   <FontAwesomeIcon
                     icon={faEdit}
                     id="edit-item-icon"
-                    onClick={() => this.editItem(item.id)}/>
+                    onClick={() => this.editItem(item.id)}
+                  />
                   <FontAwesomeIcon
                     icon={faTrash}
                     id="remove-item-icon"
-                    onClick={() => this.removeItem(item.id)} />
+                    onClick={() => this.removeItem(item.id)}
+                  />
                 </td>
               </tr>
             ))}
@@ -99,7 +90,9 @@ export default class RegistryList extends Component {
           <tfoot>
             <tr>
               <td colSpan="4">Total</td>
-              <td id='cell-total' colSpan="2">R$ {this.calcTotal()}</td>
+              <td id="cell-total" colSpan="2">
+                R$ {this.calcTotal()}
+              </td>
             </tr>
           </tfoot>
 
@@ -107,6 +100,11 @@ export default class RegistryList extends Component {
       </div>
     )
   }
+}
+
+RegistryList.defaultProps = {
+  editItem: () => {},
+  removeItem: () => {},
 }
 
 RegistryList.propTypes = {
@@ -120,6 +118,6 @@ RegistryList.propTypes = {
       category: PropTypes.number,
       status: PropTypes.number,
       price: PropTypes.number,
-    })
-  ).isRequired
+    }),
+  ).isRequired,
 }

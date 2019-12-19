@@ -1,18 +1,21 @@
 import React from 'react'
-import Enzyme, { mount, shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 import { format } from 'date-fns'
 
-import DatePagination from './DatePagination';
+import DatePagination from './DatePagination'
+import registerIcons from '../../services/FontAwesome'
 
-jest.mock('../../services/CategoryService');
+jest.mock('../../services/CategoryService')
 
-Enzyme.configure({ adapter: new Adapter() });
-  
+Enzyme.configure({ adapter: new Adapter() })
+
+registerIcons()
+
 describe('<DatePagination />', () => {
   test('should be created', () => {
-    const wrapper = shallow(<DatePagination date={new Date()} format={'MMM'} />)
+    const wrapper = shallow(<DatePagination date={new Date()} format="MMM" />)
     expect(wrapper).toMatchSnapshot()
   })
 
@@ -20,10 +23,12 @@ describe('<DatePagination />', () => {
     const mockPrevious = jest.fn(() => {})
     const wrapper = shallow(<DatePagination
       date={new Date()}
-      format={'MMM'}
-      previous={mockPrevious}/>)
+      format="MMM"
+      next={() => {}}
+      previous={mockPrevious}
+    />)
 
-    wrapper.find('#item-previous').simulate('click')
+    wrapper.find('#item-previous button').simulate('click')
 
     expect(mockPrevious).toHaveBeenCalled()
   })
@@ -32,10 +37,12 @@ describe('<DatePagination />', () => {
     const mockNext = jest.fn(() => {})
     const wrapper = shallow(<DatePagination
       date={new Date()}
-      format={'MMM'}
-      next={mockNext}/>)
+      format="MMM"
+      next={mockNext}
+      previous={() => {}}
+    />)
 
-    wrapper.find('#item-next').simulate('click')
+    wrapper.find('#item-next button').simulate('click')
 
     expect(mockNext).toHaveBeenCalled()
   })
@@ -43,13 +50,17 @@ describe('<DatePagination />', () => {
   test('should show as defined in format', () => {
     const date = new Date()
     const patern = 'MMM'
-    
-    const wrapper = shallow(<DatePagination date={date} format={patern} />)
-    
+
+    const wrapper = shallow(<DatePagination
+      date={date}
+      format={patern}
+      next={() => {}}
+      previous={() => {}}
+    />)
+
     const formatedDate = format(date, patern)
     const componentFormatedDate = wrapper.find('#item-actual').text()
 
     expect(componentFormatedDate).toBe(formatedDate)
   })
-
 })

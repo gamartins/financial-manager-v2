@@ -6,16 +6,16 @@ const get = () => {
   if (!dataList) {
     localStorage.setItem(key, JSON.stringify([]))
     return []
-  } else {
-    return dataList
   }
+
+  return dataList
 }
 
-const save = (dataList) => {
+const save = dataList => {
   localStorage.setItem(key, JSON.stringify(dataList))
 }
 
 export default {
   get,
-  save
+  save,
 }
