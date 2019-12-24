@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import CategoryForm from './CategoryForm'
-import CategoryList from './CategoryList'
+import CategoryForm from '../../components/category-form/CategoryForm'
+import CategoryList from '../../components/category-list/CategoryList'
 import CategoryService from '../../services/CategoryService'
 
 export default class CategoryPage extends Component {

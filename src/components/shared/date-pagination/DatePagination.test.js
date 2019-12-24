@@ -5,9 +5,9 @@ import Adapter from 'enzyme-adapter-react-16'
 import { format } from 'date-fns'
 
 import DatePagination from './DatePagination'
-import registerIcons from '../../services/FontAwesome'
+import registerIcons from '../../../services/FontAwesome'
 
-jest.mock('../../services/CategoryService')
+jest.mock('../../../services/CategoryService')
 
 Enzyme.configure({ adapter: new Adapter() })
 

@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 import addMonths from 'date-fns/addMonths'
 import { Button } from 'react-bootstrap'
 
-import RegistryForm from './RegistryForm'
-import RegistryList from './RegistryList'
-import DatePagination from '../date-pagination/DatePagination'
+import RegistryForm from '../../components/registry-form/RegistryForm'
+import RegistryList from '../../components/registry-list/RegistryList'
+import DatePagination from '../../components/shared/date-pagination/DatePagination'
 import RegistryService from '../../services/RegistryService'
 import Registry from '../../models/Registry'
 
