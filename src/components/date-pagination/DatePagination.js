@@ -30,7 +30,7 @@ export default class DatePagination extends Component {
           </li>
           <li id="item-next" className="page-item">
             <button type="button" className="page-link" onClick={() => this.next()}>
-              &laquo;
+              &raquo;
             </button>
           </li>
         </ul>
