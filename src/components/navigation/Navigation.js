@@ -13,6 +13,9 @@ export default function Navigation() {
           <li className="nav-item">
             <a className="nav-link" href="/category">Categorias</a>
           </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/savings">Poupança</a>
+          </li>
         </ul>
       </div>
     </nav>

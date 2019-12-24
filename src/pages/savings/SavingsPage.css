@@ -1,0 +1,8 @@
+.Savings .actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Savings .actions .btn {
+    margin-bottom: 1rem;
+}
