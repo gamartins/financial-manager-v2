@@ -28,7 +28,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && set CI=true && react-scripts test"
     }
   },
   "eslintConfig": {
