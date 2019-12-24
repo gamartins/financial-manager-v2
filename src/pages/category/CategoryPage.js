@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import CategoryForm from '../../components/category-form/CategoryForm'
-import CategoryList from '../../components/category-list/CategoryList'
+import DataList from '../../components/shared/data-list/DataList'
 import CategoryService from '../../services/CategoryService'
 
 export default class CategoryPage extends Component {
@@ -10,6 +10,9 @@ export default class CategoryPage extends Component {
 
     this.state = {
       dataList: [],
+      columns: [
+        { name: 'Nome', value: 'name' },
+      ],
       formValues: {
         id: null,
         name: '',
@@ -120,10 +123,13 @@ export default class CategoryPage extends Component {
           initialValues={this.state.formValues}
           saveItem={values => this.save(values)}
         />
-        <CategoryList
+
+        <DataList
           dataList={this.state.dataList}
-          removeItem={id => this.remove(id)}
-          editItem={item => this.setFormValue(item)}
+          columns={this.state.columns}
+          editItem={item => this.setFormValue(item.id)}
+          removeItem={item => this.removeItem(item.id)}
+          showActions
         />
       </div>
     )
